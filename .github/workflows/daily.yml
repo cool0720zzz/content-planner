@@ -22,7 +22,7 @@ jobs:
           python-version: "3.11"
 
       - name: 의존성 설치
-        run: pip install anthropic
+        run: pip install openai
 
       - name: 콘텐츠 기획안 생성 및 이메일 발송
         env:
