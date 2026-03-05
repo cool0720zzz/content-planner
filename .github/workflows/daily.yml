@@ -1,0 +1,33 @@
+name: 📅 매일 아침 콘텐츠 기획안 생성
+
+on:
+  schedule:
+    # 매일 오전 7시 (KST) = UTC 22:00 (전날)
+    - cron: "0 22 * * *"
+
+  # 수동 실행도 가능 (테스트용)
+  workflow_dispatch:
+
+jobs:
+  generate-content-plan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: Python 설치
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 의존성 설치
+        run: pip install anthropic
+
+      - name: 콘텐츠 기획안 생성 및 이메일 발송
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GMAIL_ADDRESS:     ${{ secrets.GMAIL_ADDRESS }}
+          GMAIL_APP_PW:      ${{ secrets.GMAIL_APP_PW }}
+          RECIPIENT_EMAIL:   ${{ secrets.RECIPIENT_EMAIL }}
+        run: python daily_content.py
